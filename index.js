@@ -1,9 +1,10 @@
 var Q = require('q');
+var _ = require('lodash');
 
 'use strict';
 
 // Array[fn() -> Promise[T]] -> Promise[T]
-var chain = function(promiseFns){ 
+var chain = function(promiseFns){
     return promiseFns.reduce(function(promise, fn){ return promise.then(fn)}, Q());
 }
 
@@ -28,9 +29,11 @@ var fallback = function(promiseFns) {
     return deferred.promise;
 }
 
-module.exports = { 
+
+module.exports = {
 	object: require('./src/object'),
     array: require('./src/array'),
 	fallback: fallback,
-    chain: chain
+    chain: chain,
+    retry: require('./src/retry')
 };
