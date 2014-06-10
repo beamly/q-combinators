@@ -42,10 +42,21 @@ var fallbackParallel = function(promises){
     return promises.reduce(fallbackParallelStep, Q.reject([]));
 }
 
+// Promise[T], { timeout: Number, message: String } -> Promise[T]
+var timeout = function(promise, opts){
+    var def = Q.defer();
+    setTimeout(function(){
+        def.reject(opts.message);
+    }, opts.timeout);
+    promise.then(def.resolve, def.reject);
+    return def.promise;
+}
+
 module.exports = {
 	object: require('./src/object'),
     array: require('./src/array'),
     fallbackParallel: fallbackParallel,
 	fallback: fallback,
-    chain: chain
+    chain: chain,
+    timeout: timeout
 };

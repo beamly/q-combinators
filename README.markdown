@@ -63,7 +63,7 @@ Sequentially executes an array of functions which return promises, until the fir
 	});
 ```
 
-### fallbackParallel
+### .fallbackParallel
 
 Same as .fallback, but takes an array of promises, allowing fetching results in parallel, then accepting them in preferential order.
 
@@ -95,6 +95,29 @@ Same as .fallback, but takes an array of promises, allowing fetching results in 
 	});
 ```
 
+### .timeout
+
+Imposes a timeout on a promise, returning an error value if timeout does occur:
+
+```javascript
+	// happy path
+	qCombinators.timeout(Q('success'), { timeout: 1000, message: 'operation timed out!' })
+		.then(function(res){
+			// res is 'success'
+		})
+
+	// sad path 1 - regular promise failure
+	qCombinators.timeout(Q.reject('failure'), { timeout: 1000, message: 'operation timed out!' })
+		.fail(function(err){
+			// res is 'failure'
+		})
+
+	// sad path 2 - time out
+	 qCombinators.timeout(longerThanASecond, { timeout: 1000, message: 'operation timed out!'})
+		.fail(function(err){
+			// err is { message: 'operation timed out!' }
+		});
+```
 
 ### .object.all
 
