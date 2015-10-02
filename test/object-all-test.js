@@ -91,4 +91,42 @@ describe('object.all', function(){
 		})
 		.then(done, done);
 	});
+
+	it('should ignore array that is part of promise containing object', function(done){
+		objectAll({
+			x: 'moo',
+			y: [
+				{
+					'foo': 'bar'
+				},
+				{
+					'foo': 'la'
+				}
+			],
+			z: {
+				a: Q('la'),
+				b: Q('la'),
+				c: 'la'
+			}
+		})
+		.then(function(o){
+			o.should.eql({ 
+				x: 'moo',
+				y: [
+					{
+						'foo': 'bar'
+					},
+					{
+						'foo': 'la'
+					}
+				],
+				z: {
+					a: 'la',
+					b: 'la',
+					c: 'la'
+				}
+			});
+		})
+		.then(done, done);
+	});
 });

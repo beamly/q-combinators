@@ -20,6 +20,9 @@ var all = function(obj){
         if (isPromise(value)) {
             return value;
         }
+        else if (_.isArray(value)) {
+            return Q.resolve(value);
+        }
         else if(_.isObject(value)) {
             return all(value);
         }
