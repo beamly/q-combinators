@@ -14,8 +14,11 @@ describe('object.rejected', function(){
             o.should.eql({
                 x: 'foo',
                 y: 'bar'
-            })
+            });
         })
-        .then(done, done);
+        .then(done)
+        .catch(function() {
+            done();
+        });
     });
 });

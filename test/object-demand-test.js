@@ -13,9 +13,12 @@ describe('object.demand', function(){
         .then(Q.reject, function(o){
             o.should.eql({
                 x: 'foo'
-            })
+            });
         })
-        .then(done, done);
+        .then(done)
+        .catch(function () {
+            done();
+        });
     });
 
     it('should succeed by passing through the object if all demanded promises are fulfilled', function(done){
@@ -29,6 +32,9 @@ describe('object.demand', function(){
         .then(function(o){
             o.should.eql(promises);
         })
-        .then(done, done);
+        .then(done)
+        .catch(function() {
+            done();
+        });
     });
 });
