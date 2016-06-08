@@ -24,7 +24,7 @@ describe('Q: object.demand', function(){
             y: Promise.resolve('bar'),
             z: Promise.resolve('quux')
         })
-        .then(Promise.reject, function(o){
+        .then(Promise.reject.bind(Promise), function(o){
             o.should.eql({
                 x: 'foo'
             })

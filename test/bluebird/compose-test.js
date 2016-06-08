@@ -27,7 +27,7 @@ describe('bluebird: compose', function(){
     });
 
     it('should handle failure the same way as a promise chain', function(done){
-        (compose(inc, Promise.reject, inc, inc)(1))
+        (compose(inc, Promise.reject.bind(Promise), inc, inc)(1))
             .catch(function(val){ 
                 val.should.eql(3);
             })

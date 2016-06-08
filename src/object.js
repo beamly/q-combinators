@@ -43,7 +43,7 @@ var all = function(obj){
 var fulfilled = function(objectOfPromises){
     return allSettled(objectOfPromises)
         .then(function(o){
-            var fulfilled = _.pick(o, function(res){ return res.state === 'fulfilled' });
+            var fulfilled = _.pickBy(o, function(res){ return res.state === 'fulfilled' });
             return _.mapValues(fulfilled, function(res){ return res.value });
         });
 }
@@ -52,7 +52,7 @@ var fulfilled = function(objectOfPromises){
 var rejected = function(objectOfPromises){
     return allSettled(objectOfPromises)
         .then(function(o){
-            var rejected = _.pick(o, function(res){ return res.state === 'rejected' });
+            var rejected = _.pickBy(o, function(res){ return res.state === 'rejected' });
             return _.mapValues(rejected, function(res){ return res.reason });
         });
 }

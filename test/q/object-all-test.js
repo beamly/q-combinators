@@ -24,7 +24,7 @@ describe('Q: object.all', function(){
             y: Promise.resolve(),
             z: Promise.resolve()
         })
-        .then(Promise.reject, function(err){ err.should.eql('foo'); })
+        .then(Promise.reject.bind(Promise), function(err){ err.should.eql('foo'); })
         .then(done, done);
     });
 
@@ -54,7 +54,7 @@ describe('Q: object.all', function(){
                 c: Promise.resolve('la')
             }
         })
-        .then(Promise.reject, function(err){ err.should.eql('la'); })
+        .then(Promise.reject.bind(Promise), function(err){ err.should.eql('la'); })
         .then(done, done);
     });
 
