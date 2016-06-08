@@ -24,7 +24,7 @@
     "combine"
   ],
   "author": "Beamly ltd.",
-  "license": "SEE LICENSE IN LICENSE.TXT",
+  "license": "SEE LICENSE IN LICENSE.markdown",
   "bugs": {
     "url": "https://github.com/beamly/q-combinators/issues"
   },
