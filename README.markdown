@@ -10,6 +10,18 @@ npm install q-combinators --save
 
 ## API
 
+### .setPromiseImpl
+
+All API methods below accept Q promises or any Promise/A+ implementation (e.g. bluebird or Native Promises). For backwards comptability q-combinators will use the 'Q' library internally and return Q promises by default. However if your project uses another promise implementation you can pass it to setPromiseImpl() to change this behaviour.
+
+```javascript
+// use native promises
+qCombinators.setPromiseImpl(global.Promise);
+
+// use bluebird promises
+qCombinators.setPromiseImpl(require('bluebird'));
+```
+
 ### .object.all
 
 Resolves an object of promises with an object of the resultant values if all promises resolve.  If any promise rejects, it rejects with the same reason

@@ -1,13 +1,23 @@
-var Q = require('q');
+var Promise = require('bluebird');
+
 var sinon = require('sinon');
-var chain = require('../').chain;
+var chain = require('../../').chain;
 
 require('should');
 
-describe('chain', function(){
+describe('bluebird: chain', function(){
+    before(function() {
+	require('../../').setPromiseImpl(Promise);
+    });
+
     var inc = function(a){ return a + 1 };
-    var promise1 = function(){ return Q(1) };
-    var reject1 = function(){ return Q.reject(1) };
+    var promise1 = function(){ return Promise.resolve(1) };
+    var reject1 = function(){ return Promise.reject(1) };
+
+    it('should return a Bluebird promise', function() {
+        var promise = chain([promise1, inc, inc, inc, inc]);
+        promise.then.should.eql(Promise.resolve().then);
+    });
 
     it('be the equivalent of a promise chain', function(done){
         chain([promise1, inc, inc, inc, inc])
@@ -19,7 +29,7 @@ describe('chain', function(){
 
     it('should handle failure the same way as a promise chain', function(done){
         chain([reject1, inc, inc, inc, inc])
-            .fail(function(val){ 
+            .catch(function(val){ 
                 val.should.eql(1);
             })
             .then(done, done);

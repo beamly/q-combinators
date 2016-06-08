@@ -1,14 +1,14 @@
 {
   "name": "q-combinators",
-  "version": "0.6.1",
+  "version": "0.7.1",
   "description": "Functions to combine q promises, capturing lots of useful, real world patterns.",
   "main": "index.js",
   "dependencies": {
-    "q": "1.0.0",
-    "lodash": "2.4.1"
+    "lodash": "2.4.1",
+    "q": "^1.4.1"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha test/ --reporter spec"
+    "test": "./node_modules/mocha/bin/mocha test/* test/**/* --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "url": "https://github.com/beamly/q-combinators/issues"
   },
   "devDependencies": {
+    "bluebird": "^3.4.0",
     "mocha": "1.17.0",
     "should": "3.0.1",
     "sinon": "1.7.3"

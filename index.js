@@ -1,4 +1,4 @@
-var Q = require('q');
+var promise = require('./src/promise');
 
 'use strict';
 
@@ -7,30 +7,30 @@ var compose = function(){
     var steps = Array.prototype.slice.call(arguments);
     return steps.reduceRight(function(accFn, promiseFn){
         return function(input){ return accFn(input).then(promiseFn) }
-    }, Q);
+    }, function(input) { return promise.Promise.resolve(input) });
 }
 
 // Array[fn() -> Promise[T]] -> Promise[T]
 var chain = function(promiseFns){
-    return promiseFns.reduce(function(promise, fn){ return promise.then(fn)}, Q());
+    return promiseFns.reduce(function(promise, fn){ return promise.then(fn)}, promise.Promise.resolve());
 }
 
 // Array[fn() -> Promise[T]] -> Promise[T]
 var fallback = function(promiseFns) {
-    var deferred = Q.defer();
-	var rejections = [];
+    var deferred = promise.defer();
+    var rejections = [];
     var tryNextPromise = function() {
-		if(promiseFns.length > 0) {
-			var first = promiseFns.shift();
-			first().then(function(result) {
-				deferred.resolve(result);
-			}, function(reason) {
-				rejections.push(reason);
-				tryNextPromise();
-			});
-		} else {
-			deferred.reject(rejections);
-		}
+        if(promiseFns.length > 0) {
+            var first = promiseFns.shift();
+            first().then(function(result) {
+                deferred.resolve(result);
+            }, function(reason) {
+                rejections.push(reason);
+                tryNextPromise();
+            });
+        } else {
+            deferred.reject(rejections);
+        }
     }
     tryNextPromise();
     return deferred.promise;
@@ -38,23 +38,24 @@ var fallback = function(promiseFns) {
 
 
 var fallbackParallelStep = function(accumulatedPromise, nextPromise){
-    return accumulatedPromise.fail(function(errorsSoFar){
-        return nextPromise.fail(function(error) {
-            return Q.reject(errorsSoFar.concat([error]));
+    return accumulatedPromise.catch(function(errorsSoFar){
+        return nextPromise.catch(function(error) {
+            return promise.Promise.reject(errorsSoFar.concat([error]));
         })
     });
 }
 
 // Array[Promise[T]] -> Promise[T]
 var fallbackParallel = function(promises){
-    return promises.reduce(fallbackParallelStep, Q.reject([]));
+    return promises.reduce(fallbackParallelStep, promise.Promise.reject([]));
 }
 
 module.exports = {
-	object: require('./src/object'),
+    setPromiseImpl: promise.setPromiseImpl.bind(promise),
+    object: require('./src/object'),
     array: require('./src/array'),
     fallbackParallel: fallbackParallel,
-	fallback: fallback,
+    fallback: fallback,
     chain: chain,
     compose: compose
 };

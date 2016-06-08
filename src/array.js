@@ -1,4 +1,4 @@
-var Q = require('q');
+var promise = require('./promise');
 var _ = require('lodash');
 
 'use strict';
@@ -9,7 +9,7 @@ var get = function(p){ return function(o){ return o[p] } }
 
 // [Promise] -> Promise[Array]
 var fulfilled = function(promises){
-    return Q.allSettled(promises)
+    return promise.allSettled(promises)
         .then(function(results){ 
             return results.filter(isFulfilled).map(get('value'))
         });
@@ -17,7 +17,7 @@ var fulfilled = function(promises){
 
 // [Promise] -> Promise[Array]
 var rejected = function(promises){
-    return Q.allSettled(promises)
+    return promise.allSettled(promises)
         .then(function(results){ 
             return results.filter(isRejected).map(get('reason'))
         });
