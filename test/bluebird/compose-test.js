@@ -1,12 +1,22 @@
-var Q = require('q');
+var Promise = require('bluebird');
+
 var sinon = require('sinon');
-var compose = require('../').compose;
+var compose = require('../../').compose;
 
 require('should');
 
-describe('compose', function(){
-    var inc = function(a){ return Q(a + 1) };
-    var double = function(a){ return Q(a * 2) };
+describe('bluebird: compose', function(){
+    before(function() {
+	require('../../').setPromiseImpl(Promise);
+    });
+
+    var inc = function(a){ return Promise.resolve(a + 1) };
+    var double = function(a){ return Promise.resolve(a * 2) };
+
+    it('should return a Bluebird promise', function() {
+        var promise = compose(double, inc, inc, inc)(5);
+        promise.then.should.eql(Promise.resolve().then);
+    });
 
     it('should apply all fns from right to left', function(done){
         (compose(double, inc, inc, inc)(5))
@@ -17,8 +27,8 @@ describe('compose', function(){
     });
 
     it('should handle failure the same way as a promise chain', function(done){
-        (compose(inc, Q.reject, inc, inc)(1))
-            .fail(function(val){ 
+        (compose(inc, Promise.reject, inc, inc)(1))
+            .catch(function(val){ 
                 val.should.eql(3);
             })
             .then(done, done);
