@@ -1,7 +1,9 @@
+'use strict';
+
 module.exports = function(Promise) {
 	return function allSettled(promises) {
 		return new Promise(function(resolve, reject) {
-			const results = [];
+			var results = [];
 			promises.map(promise => promise.then(value => {
 				return {
 					state: 'fulfilled',

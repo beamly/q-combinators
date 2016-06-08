@@ -1,4 +1,4 @@
-var promise = require('./promise');
+var promiseImpl = require('./promise');
 var _ = require('lodash');
 
 'use strict';
@@ -6,9 +6,9 @@ var _ = require('lodash');
 // Object[String, Promise] -> Promise[Object]
 var allSettled = function(objectOfPromises){
     var keys = _.keys(objectOfPromises);
-    var promises = _.values(objectOfPromises);
+    var promiseImpls = _.values(objectOfPromises);
 
-    return promise.allSettled(promises)
+    return promiseImpl.allSettled(promiseImpls)
         .then(function(vals){
             return _.zipObject(keys, vals) ;
         });
@@ -21,20 +21,20 @@ var all = function(obj){
             return value;
         }
         else if (_.isArray(value)) {
-            return promise.Promise.resolve(value);
+            return promiseImpl.Promise.resolve(value);
         }
         else if(_.isObject(value)) {
             return all(value);
         }
         else {
-            return promise.Promise.resolve(value);
+            return promiseImpl.Promise.resolve(value);
         }
     });
 
     var keys = _.keys(objectOfPromises);
-    var promises = _.values(objectOfPromises);
+    var promiseImpls = _.values(objectOfPromises);
 
-    return promise.Promise.all(promises).then(function(vals){
+    return promiseImpl.Promise.all(promiseImpls).then(function(vals){
         return _.zipObject(keys, vals) ;
     });
 };
@@ -65,7 +65,7 @@ var containsAnyKey = function(obj, keys){
 var demand = function(keys, objectOfPromises){
     return rejected(objectOfPromises)
         .then(function(rejections){
-            if ( containsAnyKey(rejections, keys) ) return promise.Promise.reject(_.pick(rejections, keys));
+            if ( containsAnyKey(rejections, keys) ) return promiseImpl.Promise.reject(_.pick(rejections, keys));
             else return objectOfPromises;
         });
 }
