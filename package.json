@@ -1,6 +1,6 @@
 {
   "name": "q-combinators",
-  "version": "0.7.1",
+  "version": "0.7.0",
   "description": "Functions to combine q promises, capturing lots of useful, real world patterns.",
   "main": "index.js",
   "dependencies": {
