@@ -1,5 +1,7 @@
 # q-combinators
 
+**Deprecation warning -** q-combinators is no longer maintained
+
 Functions to combine q promises, capturing lots of useful, real world patterns used across Beamly's node.js services.
 
 ## Installing
